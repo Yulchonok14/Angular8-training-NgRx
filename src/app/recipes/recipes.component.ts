@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { of } from 'rxjs';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-recipes',
@@ -9,7 +8,8 @@ import { of } from 'rxjs';
 export class RecipesComponent implements OnInit {
 
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

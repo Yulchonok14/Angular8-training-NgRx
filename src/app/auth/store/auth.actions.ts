@@ -1,6 +1,6 @@
-import { Action } from '@ngrx/store';
+import {Action} from '@ngrx/store';
 
-export const AUTHENTICATE= '[Auth] Authenticate';
+export const AUTHENTICATE = '[Auth] Authenticate';
 export const LOGIN_START = '[Auth] Login Start';
 export const AUTHENTICATE_FAIL = '[Auth] Authenticate Fail';
 export const SINGUP_START = '[Auth] Sugnup Start';
@@ -15,7 +15,8 @@ export class Authenticate implements Action {
     id: string,
     token: string,
     expirationDate: Date
-  }){}
+  }) {
+  }
 }
 
 export class AuthLogout implements Action {
@@ -25,19 +26,22 @@ export class AuthLogout implements Action {
 export class AuthLoginStart implements Action {
   readonly type = LOGIN_START;
 
-  constructor(public payload: {email: string, password: string}){}
+  constructor(public payload: { email: string, password: string }) {
+  }
 }
 
 export class AuthenticateFail implements Action {
   readonly type = AUTHENTICATE_FAIL;
 
-  constructor(public payload: string){}
+  constructor(public payload: string) {
+  }
 }
 
 export class SignupStart implements Action {
   readonly type = SINGUP_START;
 
-  constructor(public payload: {email: string, password: string}) {}
+  constructor(public payload: { email: string, password: string }) {
+  }
 }
 
 export class AutoLogin implements Action {

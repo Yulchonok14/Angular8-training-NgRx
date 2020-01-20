@@ -1,27 +1,26 @@
-import { Recipe } from '../recipe.model';
+import {Recipe} from '../recipe.model';
 import * as RecipesActions from './recipes.actions';
 
 export interface State {
-  recipes: Recipe[]
+  recipes: Recipe[];
 }
 
 const initialState: State = {
   recipes: []
 };
 
-export function RecipesReducer(state = initialState, action: RecipesActions.RecipesActions){
-  switch(action.type){
+export function RecipesReducer(state = initialState, action: RecipesActions.RecipesActions) {
+  switch (action.type) {
     case RecipesActions.SET_RECIPES:
-          return {
-            ...state,
-            recipes: [...action.payload]
-          };
+      return {
+        ...state,
+        recipes: [...action.payload]
+      };
     case RecipesActions.ADD_RECIPE:
-      console.log('action.payload: ', action.payload);
-          return {
-            ...state,
-            recipes: [...state.recipes, action.payload]
-          };
+      return {
+        ...state,
+        recipes: [...state.recipes, action.payload]
+      };
     case RecipesActions.UPDATE_RECIPE:
       let index = null;
       const updatedRecipe = {
@@ -31,8 +30,6 @@ export function RecipesReducer(state = initialState, action: RecipesActions.Reci
         }),
         ...action.payload.recipe
       };
-      console.log('index: ',index);
-      console.log('updatedRecipe: ',updatedRecipe);
       const updatedRecipes = [...state.recipes];
       updatedRecipes[index] = updatedRecipe;
       return {

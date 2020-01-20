@@ -1,17 +1,13 @@
-import { Store } from '@ngrx/store';
-import { Actions, ofType, Effect } from '@ngrx/effects';
-import { HttpClient } from '@angular/common/http';
-import { switchMap, map } from 'rxjs/operators';
-import { Injectable } from '@angular/core';
+import {Actions, Effect, ofType} from '@ngrx/effects';
+import {HttpClient} from '@angular/common/http';
+import {map, switchMap} from 'rxjs/operators';
+import {Injectable} from '@angular/core';
 
 import * as RecipesActions from './recipes.actions';
-import * as fromApp from '../../store/app.reducer';
-import { Recipe } from '../recipe.model';
+import {Recipe} from '../recipe.model';
 
 @Injectable()
-export class RecipesEffects{
-  constructor(private actions$: Actions, private http: HttpClient, private store: Store<fromApp.AppState>){}
-
+export class RecipesEffects {
   @Effect()
   fetchRecipes = this.actions$.pipe(
     ofType(RecipesActions.FETCH_RECIPES),
@@ -19,7 +15,7 @@ export class RecipesEffects{
       return this.http
         .get<Recipe[]>(
           'https://recipe-book-f67d8.firebaseio.com/recipes.json'
-        )
+        );
     }),
     map(recipes => {
       return recipes.map(recipe => {
@@ -35,5 +31,8 @@ export class RecipesEffects{
     map(recipes => {
       return new RecipesActions.SetRecipes(recipes);
     })
-  )
+  );
+
+  constructor(private actions$: Actions, private http: HttpClient) {
+  }
 }

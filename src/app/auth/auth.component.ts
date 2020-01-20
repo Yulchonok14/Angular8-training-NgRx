@@ -1,19 +1,19 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {NgForm} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {Store} from '@ngrx/store';
 
 import * as fromApp from '../store/app.reducer';
 import * as AuthActions from '../auth/store/auth.actions';
 
 @Component({
-  selector: 'auth',
+  selector: 'app-auth',
   templateUrl: './auth.component.html'
 })
-export class AuthComponent implements OnInit, OnDestroy{
+export class AuthComponent implements OnInit, OnDestroy {
   isLogin = true;
   isLoading = false;
-  error:string = null;
+  error: string = null;
 
   authSub: Subscription;
 
@@ -24,14 +24,14 @@ export class AuthComponent implements OnInit, OnDestroy{
     this.authSub = this.store.select('auth').subscribe(authData => {
       this.isLoading = authData.isLoading;
       this.error = authData.error;
-    })
+    });
   }
 
   switchTo() {
     this.isLogin = !this.isLogin;
   }
 
-  onSubmit(authForm:NgForm) {
+  onSubmit(authForm: NgForm) {
     if (!authForm.valid) {
       return;
     }
@@ -39,9 +39,9 @@ export class AuthComponent implements OnInit, OnDestroy{
     const email = authForm.value.email;
     const password = authForm.value.password;
     if (this.isLogin) {
-      this.store.dispatch(new AuthActions.AuthLoginStart({email, password}))
+      this.store.dispatch(new AuthActions.AuthLoginStart({email, password}));
     } else {
-      this.store.dispatch(new AuthActions.SignupStart({email, password}))
+      this.store.dispatch(new AuthActions.SignupStart({email, password}));
     }
     authForm.reset();
   }

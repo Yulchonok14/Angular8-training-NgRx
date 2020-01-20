@@ -1,10 +1,10 @@
-import { Ingredient } from '../../shared/ingredient.model';
+import {Ingredient} from '../../shared/ingredient.model';
 import * as ShoppingListActions from '../../shopping-list/store/shopping-list.actions';
 
 export interface State {
-  ingredients: Ingredient[],
-  ingredientEdited: Ingredient,
-  ingredientEditedIndex: number
+  ingredients: Ingredient[];
+  ingredientEdited: Ingredient;
+  ingredientEditedIndex: number;
 }
 
 const initialState: State = {
@@ -16,7 +16,7 @@ const initialState: State = {
   ingredientEditedIndex: -1
 };
 
-export function shoppingListReducer(state: State = initialState, action:ShoppingListActions.ShoppingListActions) {
+export function shoppingListReducer(state: State = initialState, action: ShoppingListActions.ShoppingListActions) {
   switch (action.type) {
     case ShoppingListActions.ADD_INGREDIENT:
       return {
@@ -45,7 +45,7 @@ export function shoppingListReducer(state: State = initialState, action:Shopping
     case ShoppingListActions.DELETE_INGREDIENT:
       return {
         ...state,
-        ingredients: state.ingredients.filter((ingredient, index) =>
+        ingredients: state.ingredients.filter((_, index) =>
           index !== state.ingredientEditedIndex
         ),
         ingredientEditedIndex: -1,

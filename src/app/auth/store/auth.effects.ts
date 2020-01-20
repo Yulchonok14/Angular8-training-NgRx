@@ -1,21 +1,21 @@
-import { Actions, ofType, Effect} from '@ngrx/effects';
-import { switchMap, map, catchError, tap } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
-import { Router } from '@angular/router';
+import {Actions, Effect, ofType} from '@ngrx/effects';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
+import {of} from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Router} from '@angular/router';
 
 import * as AuthActions from './auth.actions';
-import { User } from '../user.model';
-import { AuthService } from '../../auth/auth.service'
+import {User} from '../user.model';
+import {AuthService} from '../auth.service';
 
-export interface authDataResponse {
-  idToken: string,
-  email: string,
-  refreshToken: string,
-  expiresIn: string,
-  localId: string,
-  registered?: boolean
+export interface AuthDataResponse {
+  idToken: string;
+  email: string;
+  refreshToken: string;
+  expiresIn: string;
+  localId: string;
+  registered?: boolean;
 }
 
 const handleSuccess = (expiresIn: number, email: string, id: string, token: string) => {
@@ -32,7 +32,7 @@ const handleSuccess = (expiresIn: number, email: string, id: string, token: stri
     id,
     token,
     expirationDate
-  })
+  });
 };
 
 const handleError = (errorRes) => {
@@ -58,14 +58,11 @@ const handleError = (errorRes) => {
 
 @Injectable()
 export class AuthEffects {
-  constructor(public actions$:Actions, public http:HttpClient, public router: Router, public authService: AuthService) {
-  }
-
   @Effect()
   authSignup = this.actions$.pipe(
     ofType(AuthActions.SINGUP_START),
     switchMap((authData: AuthActions.SignupStart) => {
-      return this.http.post<authDataResponse>(
+      return this.http.post<AuthDataResponse>(
         'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyC0awTFZhoN9QSFRkaDa1ErA2rnL6QXXLc',
         {
           email: authData.payload.email,
@@ -80,15 +77,14 @@ export class AuthEffects {
           catchError((errorRes) => {
             return handleError(errorRes);
           })
-        )
+        );
     })
   );
-
   @Effect()
   authLogin = this.actions$.pipe(
     ofType(AuthActions.LOGIN_START),
-    switchMap((authData:AuthActions.AuthLoginStart) => {
-      return this.http.post<authDataResponse>(
+    switchMap((authData: AuthActions.AuthLoginStart) => {
+      return this.http.post<AuthDataResponse>(
         'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyC0awTFZhoN9QSFRkaDa1ErA2rnL6QXXLc',
         {
           email: authData.payload.email,
@@ -96,25 +92,25 @@ export class AuthEffects {
           returnSecureToken: true
         })
         .pipe(
-          tap(resData => { this.authService.setLogoutTimer(+resData.expiresIn * 1000)}),
+          tap(resData => {
+            this.authService.setLogoutTimer(+resData.expiresIn * 1000);
+          }),
           map(resData => {
             return handleSuccess(+resData.expiresIn, resData.email, resData.localId, resData.idToken);
           }),
           catchError((errorRes) => {
             return handleError(errorRes);
           })
-        )
+        );
     })
   );
-
   @Effect({dispatch: false})
   authRedirect = this.actions$.pipe(
     ofType(AuthActions.AUTHENTICATE),
-    tap((authSuccessActions: AuthActions.Authenticate) => {
+    tap(() => {
       this.router.navigate(['/']);
     })
   );
-
   @Effect({dispatch: false})
   authLogout = this.actions$.pipe(
     ofType(AuthActions.LOGOUT),
@@ -124,7 +120,6 @@ export class AuthEffects {
       this.router.navigate(['/auth']);
     })
   );
-
   @Effect()
   autoLogin = this.actions$.pipe(
     ofType(AuthActions.AUTO_LOGIN),
@@ -136,13 +131,13 @@ export class AuthEffects {
         _expirationDate: string
       } = JSON.parse(localStorage.getItem('user'));
 
-      if(!userData){
-        return { type: 'DUMMY' };
+      if (!userData) {
+        return {type: 'DUMMY'};
       }
 
       const restoreUser = new User(userData.email, userData.id, userData._token, new Date(userData._expirationDate));
 
-      if(restoreUser.token){
+      if (restoreUser.token) {
         const expirationTime: number = new Date(userData._expirationDate).getTime() - new Date().getTime();
         this.authService.setLogoutTimer(expirationTime);
         return new AuthActions.Authenticate({
@@ -153,7 +148,10 @@ export class AuthEffects {
         });
       }
 
-      return { type: 'DUMMY' };
+      return {type: 'DUMMY'};
     })
   );
+
+  constructor(public actions$: Actions, public http: HttpClient, public router: Router, public authService: AuthService) {
+  }
 }

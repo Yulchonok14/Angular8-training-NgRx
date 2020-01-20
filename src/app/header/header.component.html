@@ -9,11 +9,6 @@
       <li routerLinkActive="active"><a routerLink="auth" *ngIf="!isAuthenticated">Authentication</a></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <!--<ng-template [ngIf]="!authService.isAuthenticated()">
-        <li><a routerLink="./signup">Register</a></li>
-        <li><a routerLink="./signin">Login</a></li>
-      </ng-template>-->
-     <!-- <ng-template [ngIf]="authService.isAuthenticated()">-->
         <li><a style="cursor: pointer" (click)="onLogout()" *ngIf="isAuthenticated">Logout</a></li>
         <li class="dropdown" appDropdown>
           <a class="dropdown-toggle" role="button" *ngIf="isAuthenticated">Manage <span class="caret"></span></a>
@@ -22,7 +17,6 @@
             <li><a style="cursor: pointer" (click)="onFetchData()">Fetch Data</a></li>
           </ul>
         </li>
-      <!--</ng-template>-->
     </ul>
   </div>
 </nav>
