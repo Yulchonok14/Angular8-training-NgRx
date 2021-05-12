@@ -26,7 +26,7 @@
     "@ngrx/store": "^8.5.2",
     "@nguniversal/module-map-ngfactory-loader": "^7.1.0",
     "bootstrap": "^3.4.0",
-    "chart.js": "^2.5.0",
+    "chart.js": "^2.9.4",
     "core-js": "^2.5.4",
     "express": "^4.16.4",
     "firebase": "^6.0.4",
